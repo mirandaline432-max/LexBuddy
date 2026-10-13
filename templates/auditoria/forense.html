@@ -4,12 +4,13 @@
 
 {% block content %}
 <h1 class="fw-bold text-dark mb-2">Módulo de Auditoria Forense</h1>
-<p class="text-muted mb-4">Varredura lógica de metadados ocultos estruturais para identificar indícios de adulteração digital ou risco de provas ilícitas.</p>
+<p class="text-muted mb-4">Varredura de metadados ocultos estruturais para identificar indícios de adulteração digital ou riscos de provas ilícitas.</p>
 
 <div class="row">
+    <!-- Envio de arquivos para auditoria de metadados -->
     <div class="col-md-5 mb-4">
-        <div class="card p-4 shadow-sm border-0 bg-white">
-            <h5 class="fw-bold mb-3">Upload de Prova Documental</h5>
+        <div class="card p-4 shadow-sm border border-secondary border-opacity-25 bg-white">
+            <h5 class="fw-bold text-dark mb-3">Upload de Prova Documental</h5>
             <form action="/auditoria/analisar" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label small text-muted">Selecione o arquivo PDF ou Imagem jurídica</label>
@@ -20,9 +21,10 @@
         </div>
     </div>
 
+    <!-- Exibição de alertas do seu desenho -->
     <div class="col-md-7">
-        <div class="card p-4 shadow-sm border-0 bg-white h-100">
-            <h5 class="fw-bold mb-3">Painel Superior de Alertas (Suspeitas)</h5>
+        <div class="card p-4 shadow-sm border border-secondary border-opacity-25 bg-white h-100">
+            <h5 class="fw-bold text-dark mb-3">Painel de Alertas de Risco</h5>
             
             {% if analise %}
                 <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert">
