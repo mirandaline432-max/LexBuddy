@@ -37,7 +37,7 @@
                         <span class="fw-bold">{{ contrato.prazo_critico }}</span>
                     </div>
                     <span class="badge {% if contrato.status_prazo == 'atrasado' %}bg-danger{% else %}bg-success{% endif %} p-2">
-                        {{ contrato.status_prazo | replace('_', ' ') | uppercase }}
+                        {{ contrato.status_prazo | replace('_', ' ') | upper }}
                     </span>
                 </div>
             {% else %}

@@ -7,36 +7,76 @@
 <p class="text-muted mb-4">Ambiente de pesquisa semântica em base de dados fechada inspirado nas funcionalidades de consulta do NotebookLM.</p>
 
 <div class="row">
+    <!-- Lado Esquerdo: Formulário de Entrada -->
     <div class="col-md-6 mb-4">
-        <div class="card bg-white">
+        <div class="card bg-white p-4 rounded shadow-sm border-0">
             <h5 class="fw-bold text-primary mb-3">O que você deseja investigar?</h5>
-            <!-- form configurado para enviar os dados para a rota do python -->
             <form action="{{ url_for('pesquisa.fazer_pesquisa') }}" method="POST">
                 <div class="mb-3">
-                    <textarea name="pergunta" rows="5" class="form-control" placeholder="Ex: Qual é a stabilidade de uma funcionária demitida grávida?" required></textarea>
+                    <textarea name="pergunta" rows="5" class="form-control border-2" placeholder="Ex: bati o carro por trás, o que acontece?" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 fw-bold">Consultar Base de Dados Segura</button>
+                <button type="submit" class="btn btn-primary w-100 fw-bold py-2">Consultar Base de Dados Segura</button>
             </form>
         </div>
     </div>
 
+    <!-- Lado Direito: Resposta Dinâmica da IA -->
     <div class="col-md-6 mb-4">
-        <div class="card bg-white h-100">
-            <h5 class="fw-bold text-dark mb-3">Resposta Fundamentada do Copiloto</h5>
-            
-            {% if consulta %}
-                <div class="p-3 bg-light rounded border mb-3">
-                    <p class="text-dark mb-0">{{ consulta.pergunta_advogado }}</p>
-                    <hr>
-                    <p class="text-dark mb-0">{{ consulta.resposta_copiloto }}</p>
-                </div>
-                <div class="alert-danger border border-warning bg-warning bg-opacity-10 rounded text-dark">
-                    <small class="fw-bold d-block">📌 Fontes Verificadas Extraídas:</small>
-                    <small class="text-muted">{{ consulta.fonte_verificada }}</small>
-                </div>
-            {% else %}
-                <p class="text-muted text-center mt-5">Faça uma pergunta em linguagem natural para o copiloto cruzar os dados da biblioteca.</p>
-            {% endif %}
+        <div class="card bg-white p-4 rounded shadow-sm border-0 h-100 d-flex flex-column justify-content-between">
+            <div>
+                <h5 class="fw-bold text-dark mb-3">Resposta Fundamentada do Copiloto</h5>
+                
+                {% if consulta %}
+                    <!-- Bloco da Pergunta Feita -->
+                    <div class="p-3 bg-light rounded border mb-3">
+                        <strong class="text-muted d-block mb-1" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Sua Pergunta Investigada:</strong>
+                        <p class="text-dark fw-semibold mb-0" style="font-size: 14px;">"{{ consulta.pergunta_advogado }}"</p>
+                    </div>
+
+                    <!-- Resposta/Resumo Gerado Dinamicamente pelo Motor de IA -->
+                    <div class="p-3 bg-white border border-primary border-opacity-25 rounded mb-3" style="border-left: 4px solid #1d4ed8 !important;">
+                        <strong class="text-primary d-block mb-2" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Resumo Analítico da IA (Sem Alucinações):</strong>
+                        <p class="text-dark mb-0" style="text-align: justify; line-height: 1.6; font-size: 13.5px;">{{ consulta.resposta_copiloto }}</p>
+                    </div>
+
+                    <!-- Exibição dos cards físicos contendo o link para os documentos reais -->
+                    {% if consulta.fontes_verificadas %}
+                        <div class="mt-4">
+                            <strong class="text-secondary d-block mb-2" style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">📄 Fontes de Prova Vinculadas ao Caso:</strong>
+                            <div class="d-flex flex-column gap-3">
+                                {% for fonte in consulta.fontes_verificadas %}
+                                <div class="p-3 rounded border bg-light d-flex flex-column justify-content-between" style="box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <span class="badge bg-dark d-inline-flex align-items-center justify-content-center" style="width: 18px; height: 18px; border-radius: 50%; font-size: 10px; padding: 0;">
+                                                {{ loop.index }}
+                                            </span>
+                                            <strong class="text-dark" style="font-size: 13px;">{{ fonte.arquivo }}</strong>
+                                        </div>
+                                        <p class="text-muted mb-3" style="font-size: 12px; font-style: italic; line-height: 1.4; text-align: justify; padding-left: 24px;">
+                                            "{{ fonte.trecho }}"
+                                        </p>
+                                    </div>
+                                    <!-- Link direto para visualizar o arquivo físico original em PDF -->
+                                    <div class="text-end" style="padding-left: 24px;">
+                                        <a href="{{ url_for('pesquisa.visualizar_documento', filename=fonte.arquivo) }}" target="_blank" class="btn btn-sm btn-outline-primary fw-bold" style="font-size: 11px; padding: 3px 10px;">
+                                            📂 Abrir Documento Original
+                                        </a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                {% else %}
+                    <!-- Estado Inicial: Só é exibido se nenhuma pergunta foi enviada ainda -->
+                    <div class="text-center my-auto py-5">
+                        <div class="text-muted mb-2" style="font-size: 40px;">🤖</div>
+                        <p class="text-muted mx-auto" style="max-width: 300px; font-size: 13.5px;">Aguardando entrada de dados. Insira sua dúvida jurídica à esquerda para que o Copiloto execute a varredura semântica na biblioteca fechada.</p>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
