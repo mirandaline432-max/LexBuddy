@@ -1,7 +1,18 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_from_directory
+import google.generativeai as genai
+import chromadb
 import os
 
 pesquisa_bp = Blueprint('pesquisa', __name__, url_prefix='/')
+
+# --- CONFIGURAÇÃO DA IA REAL E BANCO VETORIAL ---
+# Inicializa o cliente do ChromaDB apontando para a pasta local permanente
+caminho_vetorial = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'instance', 'chroma_db'))
+chroma_client = chromadb.PersistentClient(path=caminho_vetorial)
+
+# Configura a API do Gemini utilizando variáveis de ambiente
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
 
 # --- ROTAS DE ACESSO (LOGIN E REGISTRO) ---
 
@@ -30,83 +41,89 @@ def registro():
 # --- ROTA PARA SERVIR OS DOCUMENTOS JURÍDICOS ORIGINAIS ---
 @pesquisa_bp.route('/documentos/<filename>')
 def visualizar_documento(filename):
-    # Procura os arquivos dentro de uma pasta chamada 'static/documentos'
     diretorio_docs = os.path.join('static', 'documentos')
     if not os.path.exists(diretorio_docs):
         os.makedirs(diretorio_docs)
     return send_from_directory(diretorio_docs, filename)
 
 
-# --- MOTOR DE INTELIGÊNCIA ARTIFICIAL E RAG SEMÂNTICO (SIMULADO DINAMICAMENTE) ---
+# --- MOTOR DE INTELIGÊNCIA ARTIFICIAL E RAG REAL ---
 
-def motor_ia_rag_lexbuddy(pergunta):
-    palavras_pergunta = set(pergunta.lower().replace("?", "").replace(",", "").split())
-    
-    # Base de conhecimento fechada e segura (O contexto que a IA lê para não alucinar)
-    banco_casos = [
-        {
-            "tags": {"gestante", "grávida", "demissão", "maternidade", "estabilidade", "trabalho", "dispensa", "emprego"},
-            "tema": "Estabilidade da Gestante no Emprego",
-            "lei": "Art. 10, II, 'b' do ADCT e Súmula 244 do TST",
-            "fontes": [
-                {"arquivo": "ADCT_Constituicao.pdf", "trecho": "Art. 10, II, 'b' - Fica vedada a dispensa arbitrária ou sem justa causa da empregada gestante, desde a confirmação da gravidez até cinco meses após o parto."},
-                {"arquivo": "Caso_Julgado_TST_RR_10024_2024.pdf", "trecho": "Precedente TST: Condenação de empresa de logística ao pagamento substitutivo integral de verbas decorrentes da estabilidade de funcionária demitida grávida, determinando que o desconhecimento do empregador não afasta a responsabilidade legal."}
-            ]
-        },
-        {
-            "tags": {"assassinato", "homicídio", "matar", "crime", "penal", "vida", "atentado", "morte"},
-            "tema": "Homicídio Qualificado e Motivo Fútil",
-            "lei": "Artigo 121, § 2º do Código Penal Brasileiro",
-            "fontes": [
-                {"arquivo": "Codigo_Penal_Decreto2848.pdf", "trecho": "Art. 121. Matar alguem: Pena - reclusão, de seis a vinte anos."},
-                {"arquivo": "Caso_Julgado_STJ_REsp_204198_SP.pdf", "trecho": "Precedente STJ: Decisão da Quinta Turma mantendo pronúncia de réu por homicídio qualificado. Firmou-se que discussões banais anteriores aos disparos de arma de fogo servem como indícios robustos de motivo fútil."}
-            ]
-        },
-        {
-            "tags": {"contrato", "danos", "prejuízo", "civil", "negligência", "obrigação", "indenização", "culpa", "batida", "carro", "acidente"},
-            "tema": "Responsabilidade Civil em Acidentes de Trânsito",
-            "lei": "Artigos 186 e 927 do Código Civil",
-            "fontes": [
-                {"arquivo": "Codigo_Civil_2002.pdf", "trecho": "Art. 186. Aquele que, por ação ou omissão voluntária, negligência ou imprudência, violar direito e causar dano a outrem comete ato ilícito."},
-                {"arquivo": "Caso_Julgado_TJSP_Apelacao_10052_SP.pdf", "trecho": "Precedente TJSP: Condenação de condutor que colidiu na traseira de outro veículo ao pagamento de R$ 15.000,00 por danos materiais. Aplicou-se a jurisprudência de presunção de culpa de quem bate atrás por não guardar distância de segurança."}
-            ]
-        }
-    ]
-    
-    melhor_contexto = None
-    maior_pontuacao = 0
-    
-    for caso in banco_casos:
-        intersecao = palavras_pergunta.intersection(caso["tags"])
-        if len(intersecao) > maior_pontuacao:
-            maior_pontuacao = len(intersecao)
-            melhor_contexto = caso
-            
-    if melhor_contexto and maior_pontuacao > 0:
-        # A IA constrói um resumo dinâmico e personalizado misturando a pergunta do usuário e os fatos reais
-        resumo_dinamico = (
-            f"Análise do Copiloto LexBuddy para a consulta sobre '{pergunta.replace('?', '')}'. "
-            f"Com base na nossa base de dados fechada sobre '{melhor_contexto['tema']}', localizei que a norma reguladora aplicável "
-            f"é o {melhor_contexto['lei']}. Sintetizando as decisões dos tribunais e os precedentes anexados abaixo, "
-            f"o entendimento consolidado determina que as obrigações legais devem ser mantidas rigorosamente, "
-            f"conforme demonstrado na decisão prática documentada no arquivo {melhor_contexto['fontes'][1]['arquivo']}."
+def motor_ia_rag_lexbuddy_real(pergunta):
+    try:
+        # 1. Acessa a coleção persistente do ChromaDB
+        colecao = chroma_client.get_or_create_collection(name="base_juridica_fechada")
+        
+        # 2. Faz a consulta vetorial por similaridade baseado na pergunta
+        resultados = colecao.query(
+            query_texts=[pergunta],
+            n_results=2  # Busca os 2 trechos de documentos mais relevantes
         )
+        
+        # Estrutura os documentos encontrados para o Prompt e para a exibição em tela
+        contexto_textos = []
+        fontes_formatadas = []
+        
+        if resultados and resultados['documents'] and resultados['documents'][0]:
+            for i in range(len(resultados['documents'][0])):
+                texto_trecho = resultados['documents'][0][i]
+                # Metadados opcionais (como o nome do arquivo original) salvos no Chroma
+                meta = resultados['metadatas'][0][i] if resultados['metadatas'] else {}
+                nome_arquivo = meta.get('arquivo', 'Documento_Indexado.pdf')
+                
+                contexto_textos.append(texto_trecho)
+                fontes_formatadas.append({
+                    "arquivo": nome_arquivo,
+                    "trecho": texto_trecho
+                })
+        
+        # Se o banco de dados vetorial estiver completamente vazio ou sem correspondências
+        if not contexto_textos:
+            return {
+                "resposta": f"Analisei sua pergunta jurídica ('{pergunta}'), mas ela foge do escopo dos documentos atualmente indexados na biblioteca segura do LexBuddy. Como uma IA programada para evitar alucinações, prefiro não formular uma resposta sem o lastro em documentos correspondentes.",
+                "fontes": []
+            }
+            
+        # 3. Engenharia de Prompt para o Gemini (Estilo NotebookLM)
+        contexto_consolidado = "\n\n".join(contexto_textos)
+        prompt_sistema = f"""
+        Você é o LexBuddy, um assistente de IA especializado no ecossistema jurídico.
+        Baseando-se estritamente nos documentos de contexto fornecidos abaixo, responda à pergunta do usuário de forma analítica e profissional.
+        Se a resposta não puder ser obtida por meio do texto abaixo, diga explicitamente que não possui a informação na base fechada e evite alucinar.
+
+        DOCUMENTOS DE CONTEXTO JURÍDICO:
+        {contexto_consolidado}
+
+        PERGUNTA DO USUÁRIO:
+        {pergunta}
+        """
+        
+        # 4. Envia o prompt estruturado para o modelo LLM real
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        resposta_ia = model.generate_content(prompt_sistema)
+        
         return {
-            "resposta": resumo_dinamico,
-            "fontes": melhor_contexto["fontes"]
+            "resposta": resposta_ia.text,
+            "fontes": fontes_formatadas
         }
         
-    return {
-        "resposta": f"Analisei sua pergunta jurídica ('{pergunta}'), mas ela foge do escopo dos documentos atualmente indexados na biblioteca segura do LexBuddy. Como IA programada para evitar alucinações, prefiro não formular uma resposta sem o lastro em documentos físicos correspondentes.",
-        "fontes": []
-    }
+    except Exception as e:
+        # Caso ocorra um erro de conexão ou de banco, retorna uma mensagem amigável de erro técnico
+        return {
+            "resposta": f"Erro interno no processamento do motor de IA: {str(e)}",
+            "fontes": []
+        }
+
 
 @pesquisa_bp.route('/pesquisa/buscar', methods=['GET', 'POST'])
 def fazer_pesquisa():
     if request.method == 'POST':
         pergunta = request.form.get('pergunta')
-        resultado_rag = motor_ia_rag_lexbuddy(pergunta)
         
+        # Chama a nova função conectada ao ChromaDB e Gemini
+        resultado_rag = motor_ia_rag_lexbuddy_real(pergunta)
+        
+        # Mantém a mesma classe simulada que o seu template HTML espera receber para renderizar a tela
         class ConsultaFake:
             def __init__(self, p, r, f):
                 self.pergunta_advogado = p
@@ -116,5 +133,4 @@ def fazer_pesquisa():
         consulta_atual = ConsultaFake(pergunta, resultado_rag['resposta'], resultado_rag['fontes'])
         return render_template('pesquisa/notebook.html', consulta=consulta_atual)
         
-    # Método GET: Garante que o template receba None e a tela comece TOTALMENTE LIMPA
     return render_template('pesquisa/notebook.html', consulta=None)
