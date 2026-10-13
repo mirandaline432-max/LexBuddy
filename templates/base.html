@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LexBuddy - Copiloto Jurídico{% endblock %}</title>
+    <!-- Bootstrap 5 para manter o padrão visual limpo -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        /* Estilo do Menu Lateral que você desenhou */
+        .sidebar {
+            width: 260px;
+            background-color: #1e293b;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: #cbd5e1;
+            padding: 12px 20px;
+            display: block;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: #334155;
+            color: white;
+        }
+        /* Área de conteúdo ao lado do menu */
+        .content-area {
+            margin-left: 260px;
+            flex-grow: 1;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR FIXA (Menu Lateral do Segundo Desenho) -->
+    <div class="sidebar d-flex flex-column justify-content-between pb-4">
+        <div>
+            <div class="px-4 mb-4">
+                <h3 class="fw-bold text-white mb-0">LexBuddy</h3>
+                <small class="text-muted">Copiloto Jurídico v1.0</small>
+            </div>
+            
+            <nav class="nav flex-column">
+                <a class="nav-link" href="/">🏠 Início (Página Pública)</a>
+                <div class="px-4 py-2 small text-uppercase text-muted fw-bold mt-3">Módulos do Sistema</div>
+                <a class="nav-link" href="/analise/contratos">📄 Análise de Contratos</a>
+                <a class="nav-link" href="/auditoria/analisar">🔍 Auditoria Forense</a>
+                <a class="nav-link" href="/pesquisa/buscar">💡 NotebookLM Jurídico</a>
+            </nav>
+        </div>
+        
+        <!-- Rodapé do menu com identificação -->
+        <div class="px-4 border-top pt-3 border-secondary">
+            <div class="small text-muted">Usuário Conectado</div>
+            <div class="fw-bold text-white">Dr. Advogado Humano</div>
+        </div>
+    </div>
+
+    <!-- ÁREA CENTRALIZADA DE CONTEÚDO (Onde os módulos carregam) -->
+    <div class="content-area">
+        {% block content %}
+        <!-- O código de cada página entra aqui dentro de forma automática -->
+        {% endblock %}
+    </div>
+
+    <script src="https://cloudflare.com"></script>
+</body>
+</html>

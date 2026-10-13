@@ -12,7 +12,6 @@
         <h1 class="fw-bold text-dark mb-4">Módulo de Contratos e Prazos</h1>
         
         <div class="row">
-            <!-- Form de Envio -->
             <div class="col-md-5 mb-4">
                 <div class="card p-4 shadow-sm border-0 bg-white">
                     <h5 class="fw-bold mb-3">Análise de Novo Acordo</h5>
@@ -26,7 +25,6 @@
                 </div>
             </div>
 
-            <!-- Exibição de Riscos e Prazos do Contrato -->
             <div class="col-md-7">
                 <div class="card p-4 shadow-sm border-0 bg-white">
                     <h5 class="fw-bold mb-3">Diagnóstico de Cláusulas Extraídas</h5>
@@ -41,7 +39,6 @@
                                 <small class="d-block text-muted text-uppercase">Prazo Limite Identificado</small>
                                 <span class="fw-bold">{{ contrato.prazo_critico }}</span>
                             </div>
-                            <!-- Badge dinâmico de status do prazo -->
                             <span class="badge {% if contrato.status_prazo == 'atrasado' %}bg-danger{% else %}bg-success{% endif %} p-2">
                                 {{ contrato.status_prazo | replace('_', ' ') | uppercase }}
                             </span>
