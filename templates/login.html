@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexBuddy - Acessar o Sistema</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <style>
+        body { height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; }
+        .card-login { width: 100%; max-width: 400px; }
+    </style>
+</head>
+<body>
+
+    <div class="card card-login bg-white">
+        <h3 class="fw-bold text-center text-dark mb-4">Entrar no LexBuddy</h3>
+        
+        <!-- Alerta de erro caso erre a senha -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-danger mb-3 small">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="/login" method="POST">
+            <div class="mb-3">
+                <label class="form-label small text-muted">Nome de Usuário</label>
+                <input type="text" name="usuario" class="form-control" placeholder="Digite seu usuário" required>
+            </div>
+            <div class="mb-4">
+                <label class="form-label small text-muted">Senha de Acesso</label>
+                <input type="password" name="senha" class="form-control" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" class="btn btn-dark w-100 fw-bold">Conectar Copiloto</button>
+        </form>
+        <div class="text-center mt-3">
+            <a href="/registro" class="small text-decoration-none">Não tem conta? Cadastre-se aqui</a>
+        </div>
+    </div>
+
+</body>
+</html>

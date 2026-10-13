@@ -7,11 +7,11 @@
 <p class="text-muted mb-4">Varredura de metadados ocultos estruturais para identificar indícios de adulteração digital ou riscos de provas ilícitas.</p>
 
 <div class="row">
-    <!-- Envio de arquivos para auditoria de metadados -->
     <div class="col-md-5 mb-4">
-        <div class="card p-4 shadow-sm border border-secondary border-opacity-25 bg-white">
+        <div class="card bg-white">
             <h5 class="fw-bold text-dark mb-3">Upload de Prova Documental</h5>
-            <form action="/auditoria/analisar" method="POST" enctype="multipart/form-data">
+            <!-- form configurado para enviar arquivos via POST -->
+            <form action="{{ url_for('auditoria.analisar_documento') }}" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label small text-muted">Selecione o arquivo PDF ou Imagem jurídica</label>
                     <input type="file" name="arquivo" class="form-control" required>
@@ -21,13 +21,12 @@
         </div>
     </div>
 
-    <!-- Exibição de alertas do seu desenho -->
     <div class="col-md-7">
-        <div class="card p-4 shadow-sm border border-secondary border-opacity-25 bg-white h-100">
+        <div class="card bg-white h-100">
             <h5 class="fw-bold text-dark mb-3">Painel de Alertas de Risco</h5>
             
             {% if analise %}
-                <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert">
+                <div class="alert-danger border-0 shadow-sm mb-4" role="alert">
                     <h6 class="fw-bold mb-1">🚨 {{ analise.detalhes_fraude }}</h6>
                 </div>
                 <div class="bg-light p-3 rounded border">
@@ -36,7 +35,7 @@
                     <p class="mb-0"><strong>Última modificação oculta:</strong> {{ analise.data_modificacao_oculta }}</p>
                 </div>
             {% else %}
-                <p class="text-muted italic-text mt-4 text-center">Nenhum documento enviado para auditoria forense neste momento.</p>
+                <p class="text-muted mt-4 text-center">Nenhum documento enviado para auditoria forense neste momento.</p>
             {% endif %}
         </div>
     </div>

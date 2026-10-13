@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexBuddy - Criar Conta</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <style>
+        body { height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; }
+        .card-registro { width: 100%; max-width: 400px; }
+    </style>
+</head>
+<body>
+
+    <div class="card card-registro bg-white">
+        <h3 class="fw-bold text-center text-dark mb-4">Cadastro de Jurista</h3>
+        <form action="/registro" method="POST">
+            <div class="mb-3">
+                <label class="form-label small text-muted">Nome Completo</label>
+                <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small text-muted">E-mail Profissional</label>
+                <input type="email" class="form-control" required>
+            </div>
+            <div class="mb-4">
+                <label class="form-label small text-muted">Senha</label>
+                <input type="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 fw-bold">Finalizar Cadastro</button>
+        </form>
+        <div class="text-center mt-3">
+            <a href="/login" class="small text-decoration-none">Já tem conta? Faça o login</a>
+        </div>
+    </div>
+
+</body>
+</html>
