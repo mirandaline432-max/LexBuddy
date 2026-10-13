@@ -1,0 +1,35 @@
+/* Customizações para os Módulos Internos */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f1f5f9 !important;
+}
+
+/* Deixa as caixas internas com fundo branco e bordas finas e modernas */
+.card {
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 24px !important;
+}
+
+/* Estilo para o painel superior de alertas forenses */
+.alert-danger {
+    background-color: #fef2f2 !important;
+    color: #991b1b !important;
+    border: 1px solid #fca5a5 !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+}
+
+/* Estilo para a resposta do copiloto estilo NotebookLM */
+.bg-light.rounded.border {
+    background-color: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    padding: 20px !important;
+    line-height: 1.6;
+}
+
+/* Ajuste nos botões internos de ação */
+.btn-primary { background-color: #2563eb !important; border-color: #2563eb !important; }
+.btn-success { background-color: #16a34a !important; border-color: #16a34a !important; }
+.btn-dark { background-color: #0f172a !important; border-color: #0f172a !important; }

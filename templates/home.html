@@ -4,101 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LexBuddy - Copiloto Jurídico Inteligente</title>
-    <!-- Puxa o Bootstrap direto do seu computador usando a sintaxe do Flask -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- Estilização Direta Injetada para ignorar bloqueios do Linux -->
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; color: #334155; }
+        nav { background-color: #1e293b; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+        nav a.logo { color: #fff; font-weight: bold; font-size: 24px; text-decoration: none; }
+        nav .buttons a { color: #fff; text-decoration: none; margin-left: 15px; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; }
+        nav .buttons a.btn-login { border: 1px solid #cbd5e1; }
+        nav .buttons a.btn-register { background-color: #2563eb; }
+        
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .welcome-box { background: #fff; padding: 40px; border-radius: 12px; border: 1px solid #e2e8f0; text-center: text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 40px; text-align: center; }
+        .welcome-box h1 { margin-top: 0; font-size: 32px; color: #0f172a; }
+        .italic-phrase { font-style: italic; color: #2563eb; font-weight: 600; }
+        
+        .features-section { display: flex; gap: 30px; align-items: center; margin-bottom: 40px; }
+        .features-text { flex: 1; }
+        .features-text h2 { font-size: 26px; color: #0f172a; margin-top: 0; }
+        .features-grid { flex: 2; display: flex; gap: 20px; }
+        .feature-card { background: #fff; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0; flex: 1; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .feature-card h4 { margin-top: 0; color: #1e293b; font-size: 18px; }
+        
+        .faq-section { border-top: 1px solid #e2e8f0; padding-top: 40px; }
+        .faq-section h2 { text-align: center; color: #0f172a; margin-bottom: 30px; }
+        .faq-item { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 15px; }
+        .faq-item h4 { margin-top: 0; color: #1e293b; margin-bottom: 10px; }
+        .faq-item p { margin: 0; color: #64748b; font-size: 15px; }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 
-    <!-- NAVBAR (Menu superior do desenho) -->
-    <nav class="navbar navbar-dark bg-dark px-4 py-3 d-flex justify-content-between">
-        <a class="navbar-brand fw-bold fs-3 text-white text-decoration-none" href="#">LexBuddy</a>
-        <div>
-            <a href="/login" class="btn btn-outline-light me-2">Entrar</a>
-            <a href="/registro" class="btn btn-primary">Cadastrar</a>
+    <!-- NAVBAR (Topo fixo) -->
+    <nav>
+        <a class="logo" href="#">LexBuddy</a>
+        <div class="buttons">
+            <a href="/login" class="btn-login">Entrar</a>
+            <a href="/registro" class="btn-register">Cadastrar</a>
         </div>
     </nav>
 
-    <!-- SEÇÃO 1: Bloco de Boas-Vindas Centralizado -->
-    <section class="container my-5 text-center">
-        <div class="p-5 mb-4 bg-white rounded-3 border shadow-sm">
-            <h1 class="display-5 fw-bold text-dark">Boas-vindas ao LexBuddy</h1>
-            <p class="fs-5 text-muted my-4">Seu copiloto inteligente para análise de contratos, auditoria forense de metadados e pesquisa de jurisprudências sem alucinações.</p>
-            <p class="fw-semibold text-primary fs-5">"A tecnologia elevando a precisão do ecossistema jurídico."</p>
-        </div>
-    </section>
+    <div class="container">
+        <!-- SEÇÃO 1: Boas-Vindas -->
+        <section class="welcome-box">
+            <h1>Boas-vindas ao LexBuddy</h1>
+            <p>Seu copiloto inteligente para análise de contratos, auditoria forense de metadados e pesquisa de jurisprudências sem alucinações.</p>
+            <p class="italic-phrase">"A tecnologia elevando a precisão do ecossistema jurídico."</p>
+        </section>
 
-    <!-- SEÇÃO 2: Grid com Texto e as 3 Caixas Laterais -->
-    <section class="container my-5 py-4">
-        <div class="row align-items-center">
-            <!-- Bloco de texto da esquerda -->
-            <div class="col-md-4 mb-4">
-                <h2 class="fw-bold text-dark">O que dizem os profissionais</h2>
-                <p class="text-muted fs-6">Estudantes e advogados de alta performance utilizam nossos módulos isolados para otimizar tempo e blindar suas defesas contra fraudes documentais.</p>
+        <!-- SEÇÃO 2: Grid de Recursos -->
+        <section class="features-section">
+            <div class="features-text">
+                <h2>O que dizem os profissionais</h2>
+                <p>Estudantes e advogados de alta performance utilizam nossos módulos isolados para otimizar tempo e blindar defesas.</p>
             </div>
-            <!-- As 3 Caixas horizontais do desenho -->
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <div class="card p-4 shadow-sm text-center h-100 border border-secondary border-opacity-25 bg-white">
-                            <h5 class="fw-bold text-primary mb-2">Análise de IA</h5>
-                            <p class="text-muted small mb-0">Cláusulas de contratos e prazos interpretados de forma limpa.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card p-4 shadow-sm text-center h-100 border border-secondary border-opacity-25 bg-white">
-                            <h5 class="fw-bold text-success mb-2">Forense Digital</h5>
-                            <p class="text-muted small mb-0">Varredura profunda de metadados ocultos contra adulterações.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <div class="card p-4 shadow-sm text-center h-100 border border-secondary border-opacity-25 bg-white">
-                            <h5 class="fw-bold text-warning mb-2">Base Segura</h5>
-                            <p class="text-muted small mb-0">Estilo NotebookLM para busca de precedentes reais jurídicos.</p>
-                        </div>
-                    </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>Análise de IA</h4>
+                    <p>Cláusulas de contratos e prazos interpretados de forma limpa.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Forense Digital</h4>
+                    <p>Varredura profunda de metadados ocultos contra adulterações.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Base Segura</h4>
+                    <p>Estilo NotebookLM para busca de precedentes reais.</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- SEÇÃO 3: Lista de FAQ Estruturada -->
-    <section class="container my-5 py-4 border-top">
-        <h2 class="fw-bold text-center text-dark mb-4">Perguntas Frequentes</h2>
-        <div class="mx-auto" style="max-width: 800px;">
-            <div class="accordion" id="faqAccordion">
-                
-                <div class="accordion-item mb-2 border rounded shadow-sm">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed fw-semibold text-dark bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                            Como o sistema ajuda a identificar fraudes?
-                        </button>
-                    </h2>
-                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted bg-light">
-                            Nosso módulo forense varre dados ocultos estruturais do arquivo para capturar discrepâncias de datas de assinatura, localização ou indícios de softwares de edição gráfica.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="accordion-item mb-2 border rounded shadow-sm">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed fw-semibold text-dark bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                            A inteligência artificial pode inventar leis?
-                        </button>
-                    </h2>
-                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body text-muted bg-light">
-                            Não. O LexBuddy utiliza uma arquitetura de banco jurídica isolada e fechada (RAG), impedindo alucinações de dados e restringindo respostas estritamente a fatos reais.
-                        </div>
-                    </div>
-                </div>
-
+        <!-- SEÇÃO 3: Perguntas Frequentes -->
+        <section class="faq-section">
+            <h2>Perguntas Frequentes</h2>
+            
+            <div class="faq-item">
+                <h4>Como o sistema ajuda a identificar fraudes?</h4>
+                <p>Nosso módulo forense varre dados ocultos estruturais do arquivo para capturar discrepâncias de datas de assinatura ou indícios de softwares de edição.</p>
             </div>
-        </div>
-    </section>
 
-    <!-- Script oficial para funcionamento do clique do FAQ -->
-    <script src="https://cloudflare.com"></script>
-     
+            <div class="faq-item">
+                <h4>A inteligência artificial pode inventar leis?</h4>
+                <p>Não. O LexBuddy utiliza uma arquitetura de banco jurídica isolada e fechada (RAG), restringindo respostas estritamente a fatos reais.</p>
+            </div>
+        </section>
+    </div>
+
 </body>
 </html>

@@ -4,33 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LexBuddy - Criar Conta</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- Estilização Injetada para o Painel de Cadastro -->
     <style>
-        body { height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; }
-        .card-registro { width: 100%; max-width: 400px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 0; display: flex; height: 100vh; align-items: center; justify-content: center; }
+        .card-register { background: #fff; padding: 40px; border-radius: 12px; border: 1px solid #e2e8f0; width: 100%; max-width: 400px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .card-register h3 { margin-top: 0; margin-bottom: 24px; font-size: 24px; font-weight: 700; text-align: center; color: #0f172a; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 6px; }
+        .form-control { display: block; width: 100%; padding: 12px 14px; font-size: 14px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .btn-primary { display: block; width: 100%; padding: 12px; font-size: 14px; font-weight: 700; text-align: center; color: #fff; background-color: #2563eb; border-radius: 6px; cursor: pointer; border: none; box-sizing: border-box; transition: background 0.2s; }
+        .btn-primary:hover { background-color: #1d4ed8; }
+        .text-center { text-align: center; margin-top: 20px; }
+        .text-center a { font-size: 14px; color: #2563eb; text-decoration: none; font-weight: 500; }
     </style>
 </head>
 <body>
 
-    <div class="card card-registro bg-white">
-        <h3 class="fw-bold text-center text-dark mb-4">Cadastro de Jurista</h3>
+    <div class="card-register">
+        <h3>Cadastro de Jurista</h3>
+        
         <form action="/registro" method="POST">
-            <div class="mb-3">
-                <label class="form-label small text-muted">Nome Completo</label>
-                <input type="text" class="form-control" required>
+            <div class="form-group">
+                <label class="form-label">Nome Completo</label>
+                <input type="text" class="form-control" placeholder="Digite seu nome completo" required>
             </div>
-            <div class="mb-3">
-                <label class="form-label small text-muted">E-mail Profissional</label>
-                <input type="email" class="form-control" required>
+            <div class="form-group">
+                <label class="form-label">E-mail Profissional</label>
+                <input type="email" class="form-control" placeholder="Ex: nome@adv.com" required>
             </div>
-            <div class="mb-4">
-                <label class="form-label small text-muted">Senha</label>
-                <input type="password" class="form-control" required>
+            <div class="form-group">
+                <label class="form-label">Senha de Acesso</label>
+                <input type="password" class="form-control" placeholder="Crie uma senha forte" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100 fw-bold">Finalizar Cadastro</button>
+            <button type="submit" class="btn-primary">Finalizar Cadastro</button>
         </form>
-        <div class="text-center mt-3">
-            <a href="/login" class="small text-decoration-none">Já tem conta? Faça o login</a>
+        
+        <div class="text-center">
+            <a href="/login">Já tem uma conta? Faça o login</a>
         </div>
     </div>
 

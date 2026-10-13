@@ -4,75 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}LexBuddy - Copiloto Jurídico{% endblock %}</title>
-    <!-- Puxa o Bootstrap direto do seu computador de forma segura -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- Estilização Direta Injetada para o Dashboard Interno -->
     <style>
-        body {
-            display: flex;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
-        /* Estilo do Menu Lateral que você desenhou */
-        .sidebar {
-            width: 260px;
-            background-color: #1e293b;
-            color: white;
-            position: fixed;
-            height: 100vh;
-            padding-top: 20px;
-        }
-        .sidebar .nav-link {
-            color: #cbd5e1;
-            padding: 12px 20px;
-            display: block;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            background-color: #334155;
-            color: white;
-        }
-        /* Área de conteúdo ao lado do menu */
-        .content-area {
-            margin-left: 260px;
-            flex-grow: 1;
-            padding: 40px;
-        }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 0; display: flex; min-height: 100vh; }
+        
+        /* Sidebar Fixa do seu rascunho */
+        .sidebar { width: 260px; background-color: #1e293b; color: white; position: fixed; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; }
+        .sidebar-top { padding: 30px 24px; }
+        .sidebar h3 { margin: 0; font-size: 22px; font-weight: 700; color: #fff; }
+        .sidebar .version { font-size: 12px; color: #64748b; display: block; margin-top: 4px; }
+        
+        .sidebar-menu { margin-top: 30px; display: flex; flex-direction: column; gap: 4px; }
+        .menu-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #64748b; padding: 0 24px; font-weight: 700; margin-bottom: 8px; }
+        .sidebar a.nav-link { color: #cbd5e1; padding: 12px 24px; text-decoration: none; font-weight: 500; font-size: 15px; display: block; transition: background 0.2s; }
+        .sidebar a.nav-link:hover { background-color: #334155; color: #fff; }
+        
+        .sidebar-footer { padding: 20px 24px; border-top: 1px solid #334155; background-color: #0f172a; }
+        .sidebar-footer .user-title { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700; }
+        .sidebar-footer .user-name { font-size: 14px; color: #fff; font-weight: 600; margin-top: 2px; }
+
+        /* Área do Caso Selecionado */
+        .content-area { margin-left: 260px; flex-grow: 1; padding: 40px; box-sizing: border-box; }
+        .page-header { margin-bottom: 30px; }
+        .page-header h1 { margin: 0; font-size: 28px; color: #0f172a; }
+        .page-header p { margin: 8px 0 0 0; color: #64748b; font-size: 15px; }
+        
+        /* Grid Modular do seu desenho */
+        .workspace-grid { display: flex; gap: 30px; }
+        .col-left { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+        .col-right { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+        
+        .card { background: #fff; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .card h5 { margin-top: 0; margin-bottom: 16px; font-size: 18px; color: #0f172a; }
+        
+        /* Formulários e Inputs */
+        .form-group { margin-bottom: 16px; }
+        .form-label { display: block; font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 6px; }
+        .form-control { display: block; width: 100%; padding: 10px 14px; font-size: 14px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        textarea.form-control { resize: none; }
+        
+        /* Botões de Ação */
+        .btn { display: block; width: 100%; padding: 12px; font-size: 14px; font-weight: 700; text-align: center; text-decoration: none; border-radius: 6px; cursor: pointer; border: none; box-sizing: border-box; }
+        .btn-primary { background-color: #2563eb; color: #fff; }
+        .btn-success { background-color: #16a34a; color: #fff; }
+        .btn-dark { background-color: #0f172a; color: #fff; }
+        
+        /* Caixa Superior de Alertas Forenses */
+        .alert-danger { background-color: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; padding: 16px; border-radius: 8px; margin-bottom: 20px; font-weight: 600; }
+        
+        /* Resposta e Fontes do NotebookLM */
+        .response-text { background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 16px; border-radius: 6px; color: #334155; line-height: 1.6; margin-bottom: 16px; }
+        .source-box { background-color: rgba(234, 179, 8, 0.08); border: 1px solid #fef08a; padding: 12px; border-radius: 6px; }
+        .source-box strong { color: #854d0e; font-size: 12px; display: block; text-transform: uppercase; }
+        .source-box p { margin: 4px 0 0 0; color: #71717a; font-size: 13px; }
+        .empty-state { text-align: center; color: #94a3b8; font-style: italic; margin-top: 40px; }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR FIXA (Menu Lateral do Segundo Desenho) -->
-    <div class="sidebar d-flex flex-column justify-content-between pb-4">
-        <div>
-            <div class="px-4 mb-4">
-                <h3 class="fw-bold text-white mb-0">LexBuddy</h3>
-                <small class="text-muted">Copiloto Jurídico v1.0</small>
-            </div>
+    <!-- MENU LATERAL FIXO (Sidebar) -->
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <h3>LexBuddy</h3>
+            <span class="version">Copiloto Jurídico v1.0</span>
             
-            <nav class="nav flex-column">
-                <a class="nav-link" href="/">🏠 Início (Página Pública)</a>
-                <div class="px-4 py-2 small text-uppercase text-muted fw-bold mt-3">Módulos do Sistema</div>
+            <div class="sidebar-menu">
+                <a class="nav-link" href="/">🏠 Início Pública</a>
+                <div class="menu-title" style="margin-top: 20px;">Módulos do Sistema</div>
                 <a class="nav-link" href="/analise/contratos">📄 Análise de Contratos</a>
                 <a class="nav-link" href="/auditoria/analisar">🔍 Auditoria Forense</a>
                 <a class="nav-link" href="/pesquisa/buscar">💡 NotebookLM Jurídico</a>
-            </nav>
+            </div>
         </div>
         
-        <!-- Rodapé do menu com identificação -->
-        <div class="px-4 border-top pt-3 border-secondary">
-            <div class="small text-muted">Usuário Conectado</div>
-            <div class="fw-bold text-white">Dr. Advogado Humano</div>
+        <div class="sidebar-footer">
+            <div class="user-title">Usuário Conectado</div>
+            <div class="user-name">Dr. Advogado Humano</div>
         </div>
     </div>
 
-    <!-- ÁREA CENTRALIZADA DE CONTEÚDO (Onde os módulos carregam) -->
+    <!-- ÁREA DE CONTEÚDO DINÂMICO -->
     <div class="content-area">
         {% block content %}
-        <!-- O código de cada página entra aqui dentro de forma automática -->
         {% endblock %}
     </div>
 
-    <script src="https://cloudflare.com"></script>
 </body>
 </html>

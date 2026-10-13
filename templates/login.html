@@ -4,39 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LexBuddy - Acessar o Sistema</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- Estilização Injetada para ignorar os bloqueios de segurança -->
     <style>
-        body { height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; }
-        .card-login { width: 100%; max-width: 400px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 0; display: flex; height: 100vh; align-items: center; justify-content: center; }
+        .card-login { background: #fff; padding: 40px; border-radius: 12px; border: 1px solid #e2e8f0; width: 100%; max-width: 380px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .card-login h3 { margin-top: 0; margin-bottom: 24px; font-size: 24px; font-weight: 700; text-align: center; color: #0f172a; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 13px; color: #64748b; font-weight: 600; margin-bottom: 6px; }
+        .form-control { display: block; width: 100%; padding: 12px 14px; font-size: 14px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        .btn-dark { display: block; width: 100%; padding: 12px; font-size: 14px; font-weight: 700; text-align: center; color: #fff; background-color: #0f172a; border-radius: 6px; cursor: pointer; border: none; box-sizing: border-box; transition: background 0.2s; }
+        .btn-dark:hover { background-color: #1e293b; }
+        .text-center { text-align: center; margin-top: 20px; }
+        .text-center a { font-size: 14px; color: #2563eb; text-decoration: none; font-weight: 500; }
+        .alert-danger { background-color: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 13px; text-align: center; font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <div class="card card-login bg-white">
-        <h3 class="fw-bold text-center text-dark mb-4">Entrar no LexBuddy</h3>
+    <div class="card-login">
+        <h3>Entrar no LexBuddy</h3>
         
-        <!-- Alerta de erro caso erre a senha -->
+        <!-- Exibe mensagem de erro caso erre o usuário/senha -->
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert-danger mb-3 small">{{ message }}</div>
+                    <div class="alert-danger">{{ message }}</div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
 
         <form action="/login" method="POST">
-            <div class="mb-3">
-                <label class="form-label small text-muted">Nome de Usuário</label>
-                <input type="text" name="usuario" class="form-control" placeholder="Digite seu usuário" required>
+            <div class="form-group">
+                <label class="form-label">Nome de Usuário</label>
+                <input type="text" name="usuario" class="form-control" placeholder="Dica: admin" required>
             </div>
-            <div class="mb-4">
-                <label class="form-label small text-muted">Senha de Acesso</label>
-                <input type="password" name="senha" class="form-control" placeholder="Digite sua senha" required>
+            <div class="form-group">
+                <label class="form-label">Senha de Acesso</label>
+                <input type="password" name="senha" class="form-control" placeholder="Dica: 123" required>
             </div>
-            <button type="submit" class="btn btn-dark w-100 fw-bold">Conectar Copiloto</button>
+            <button type="submit" class="btn-dark">Conectar Copiloto</button>
         </form>
-        <div class="text-center mt-3">
-            <a href="/registro" class="small text-decoration-none">Não tem conta? Cadastre-se aqui</a>
+        
+        <div class="text-center">
+            <a href="/registro">Não tem uma conta? Cadastre-se aqui</a>
         </div>
     </div>
 

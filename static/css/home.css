@@ -1,0 +1,32 @@
+/* Customizações para a Landing Page Pública */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #334155;
+}
+
+/* Deixa a caixa de boas-vindas com visual corporativo premium */
+.section-welcome .bg-white {
+    border-radius: 16px !important;
+    border: 1px solid #e2e8f0 !important;
+    background: linear-gradient(145deg, #ffffff, #f8fafc) !important;
+}
+
+/* Destaca a frase intuitiva do seu rascunho */
+.italic-phrase {
+    font-style: italic;
+    color: #0f172a !important;
+    border-left: 4px solid #3b82f6;
+    padding-left: 12px;
+    display: inline-block;
+}
+
+/* Suaviza as 3 caixas de módulos em grid */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px !important;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05) !important;
+}
