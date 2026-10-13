@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>LexBuddy - Análise Estratégica de Contratos</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+<body class="bg-light">
+
+    <div class="container my-5">
+        <a href="/" class="btn btn-sm btn-secondary mb-4">← Voltar para a Home</a>
+        <h1 class="fw-bold text-dark mb-4">Módulo de Contratos e Prazos</h1>
+        
+        <div class="row">
+            <!-- Form de Envio -->
+            <div class="col-md-5 mb-4">
+                <div class="card p-4 shadow-sm border-0 bg-white">
+                    <h5 class="fw-bold mb-3">Análise de Novo Acordo</h5>
+                    <form action="/analise/contratos" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">Título identificador do caso jurídico</label>
+                            <input type="text" name="titulo_documento" class="form-control" placeholder="Ex: Caso Empresa X vs Cliente Y" required>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100 fw-bold">Executar Mapeamento Estratégico</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Exibição de Riscos e Prazos do Contrato -->
+            <div class="col-md-7">
+                <div class="card p-4 shadow-sm border-0 bg-white">
+                    <h5 class="fw-bold mb-3">Diagnóstico de Cláusulas Extraídas</h5>
+                    
+                    {% if contrato %}
+                        <div class="p-3 bg-light rounded border mb-3">
+                            <p class="text-danger mb-0 font-monospace small"><strong>{{ contrato.riscos_detectados }}</strong></p>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center p-3 rounded bg-dark text-white">
+                            <div>
+                                <small class="d-block text-muted text-uppercase">Prazo Limite Identificado</small>
+                                <span class="fw-bold">{{ contrato.prazo_critico }}</span>
+                            </div>
+                            <!-- Badge dinâmico de status do prazo -->
+                            <span class="badge {% if contrato.status_prazo == 'atrasado' %}bg-danger{% else %}bg-success{% endif %} p-2">
+                                {{ contrato.status_prazo | replace('_', ' ') | uppercase }}
+                            </span>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center mt-4">Nenhum contrato interpretado no painel.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

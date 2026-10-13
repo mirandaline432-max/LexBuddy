@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>LexBuddy - Auditoria Forense Digital</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+<body class="bg-light">
+
+    <div class="container my-5">
+        <a href="/" class="btn btn-sm btn-secondary mb-4">← Voltar para a Home</a>
+        <h1 class="fw-bold text-dark mb-4">Módulo de Auditoria Forense</h1>
+        
+        <div class="row">
+            <!-- Lado Esquerdo: Envio de Arquivos -->
+            <div class="col-md-5 mb-4">
+                <div class="card p-4 shadow-sm border-0 bg-white">
+                    <h5 class="fw-bold mb-3">Upload de Prova Documental</h5>
+                    <form action="/auditoria/analisar" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">Selecione o arquivo PDF ou Imagem jurídica</label>
+                            <input type="file" name="arquivo" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 fw-bold">Iniciar Varredura de Metadados</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Lado Direito: O Painel de Alertas que você desenhou -->
+            <div class="col-md-7">
+                <div class="card p-4 shadow-sm border-0 bg-white h-100">
+                    <h5 class="fw-bold mb-3">Painel de Alertas de Risco</h5>
+                    
+                    {% if analise %}
+                        <!-- Alerta Vermelho de Suspeita Forense -->
+                        <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert">
+                            <h6 class="fw-bold mb-1">🚨 {{ analise.detalhes_fraude }}</h6>
+                        </div>
+
+                        <div class="bg-light p-3 rounded border">
+                            <p class="mb-2"><strong>Arquivo analisado:</strong> {{ analise.nome_arquivo }}</p>
+                            <p class="mb-2"><strong>Software gerador oculto:</strong> {{ analise.software_criador }}</p>
+                            <p class="mb-0"><strong>Última modificação oculta:</strong> {{ analise.data_modificacao_oculta }}</p>
+                        </div>
+                    {% else %}
+                        <p class="text-muted italic-text mt-4 text-center">Nenhum documento enviado para auditoria forense neste momento.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
